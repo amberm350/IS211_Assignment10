@@ -1,37 +1,68 @@
 import sqlite3
 
-DB_PATH = "pets.db"
+def add_person_table():
 
-sql = "INSERT INTO person (id, first_name, last_name, age) VALUES (%s, %s, %s, %s)"
+    person = (
+        (1, 'James', 'Smith', 41),
+        (2, 'Diana', 'Greene', 23),
+        (3, 'Sara', 'White', 27),
+        (4, 'William', 'Gibson', 23)
+    )
 
-Val1= [
-(1, 'James', 'Smith', 41),
-(2,'Diana','Greene',23),
-(3,'Sara','White',27),
-(4,'William','Gibson',23)
-]
+    con = sqlite3.connect('pets.db')
 
-sql = "INSERT INTO pet (id, name, breed, age, dead) VALUES (%s, %s, %s, %s, %s)"
+    with con:
+        cur = con.cursor()
 
-Val2= [
+        cur.execute("DROP TABLE IF EXISTS person")
+        cur.execute("CREATE TABLE Person(id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, age INTEGER)")
+        cur.executemany("INSERT INTO Person VALUES(?, ?, ?, ?)", person)
+        
+def add_pets_table():
+
+    pets = (
 (1,'Rusty','Dalmation',4,1),
 (2,'Bella','AlaskanMalamute',3,0),
 (3,'Max','CockerSpaniel',1,0),
 (4,'Rocky','Beagle',7,0),
 (5,'Rufus','CockerSpaniel',1,0),
 (6,'Spot','Bloodhound',2,1)
-]
+    )
 
-sql = "INSERT INTO person_pet (person_id, pet_id) VALUES (%s, %s)"
+    con = sqlite3.connect('pets.db')
 
-Val3= [
-(1,1),
+    with con:
+        cur = con.cursor()
+
+        cur.execute("DROP TABLE IF EXISTS pets")
+        cur.execute("CREATE TABLE pets(id INTEGER PRIMARY KEY, name TEXT, breed TEXT, age TEXT, dead INTEGER)")
+        cur.executemany("INSERT INTO pets VALUES(?, ?, ?, ?, ?)", pets)
+        
+if __name__ == '__main__':
+    add_pets_table()
+
+def add_person_pet_table():
+
+    con = sqlite3.connect('pets.db')
+
+    person_pet = [
+(1, 1),
 (1, 2),
 (2, 3),
 (2, 4),
 (3, 5),
 (4, 6)
-]
+    ]
+    with con:
+        cur = con.cursor()
+
+        cur.execute("DROP TABLE IF EXISTS person_pet")
+        cur.execute("CREATE TABLE person_pet(person_id INTEGER, pet_id INTEGER)")
+        cur.executemany("INSERT INTO person_pet VALUES(?, ?)", person_pet)
+        cur.execute ('SELECT p.*, t.* FROM person p inner join person_pet pp on p.id = pp.person_id inner join pets t on pp.pet_id = t.id where pp.person_id = pp.pet_id')
+
+if __name__ == '__main__':
+    add_person_pet_table()
 
     
 
