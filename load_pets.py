@@ -59,8 +59,7 @@ def add_person_pet_table():
         cur.execute("DROP TABLE IF EXISTS person_pet")
         cur.execute("CREATE TABLE person_pet(person_id INTEGER, pet_id INTEGER)")
         cur.executemany("INSERT INTO person_pet VALUES(?, ?)", person_pet)
-        cur.execute ('SELECT p.*, t.* FROM person p inner join person_pet pp on p.id = pp.person_id inner join pets t on pp.pet_id = t.id where pp.person_id = pp.pet_id')
-
+        
 if __name__ == '__main__':
     add_person_pet_table()
 
