@@ -9,7 +9,7 @@ def main():
     
     id = int(input("Enter a person id? "))
 
-    query = "select p.first, p.last, p.age, t.name, t.breed, t.age FROM person p inner join person_pet pp on p.id = pp.person_id inner join pets t on pp.pet_id = t.id where pp.person_id = pp.pet_id where p.id = {id}"
+    query = f"select p.first_name, p.last_name, p.age, t.name, t.breed, t.age FROM person p inner join person_pet pp on p.id = pp.person_id inner join pets t on pp.pet_id = t.id where p.id = {id}"
 
     while id > 0:
         cur.execute(query.format(id))
@@ -19,8 +19,9 @@ def main():
 
             else:
                 print(f"No people found with id = {id}")
+
+            
         
-       
         
 
 if __name__ == "__main__":
